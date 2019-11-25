@@ -1414,7 +1414,7 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC 
   };
 
   const rowTitle = () => {
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
+    if (item.type === 'user_invoice' || item.type === 'paymentRequest') {
       if (isNaN(item.value)) {
         item.value = '0';
       }
@@ -1439,7 +1439,7 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC 
   const rowTitleStyle = () => {
     let color = BlueApp.settings.successColor;
 
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
+    if (item.type === 'user_invoice' || item.type === 'paymentRequest') {
       const currentDate = new Date();
       const now = (currentDate.getTime() / 1000) | 0;
       const invoiceExpiration = item.timestamp + item.expire_time;
@@ -1490,7 +1490,7 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC 
       );
     }
 
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
+    if (item.type === 'user_invoice' || item.type === 'paymentRequest') {
       if (!item.ispaid) {
         const currentDate = new Date();
         const now = (currentDate.getTime() / 1000) | 0;
@@ -1539,7 +1539,7 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC 
   const onPress = () => {
     if (item.hash) {
       NavigationService.navigate('TransactionStatus', { hash: item.hash });
-    } else if (item.type === 'user_invoice' || item.type === 'payment_request' || item.type === 'paid_invoice') {
+    } else if (item.type === 'user_invoice' || item.type === 'paymentRequest' || item.type === 'paid_invoice') {
       const lightningWallet = BlueApp.getWallets().filter(wallet => {
         if (typeof wallet === 'object') {
           if (wallet.hasOwnProperty('secret')) {
@@ -1603,7 +1603,7 @@ export class BlueListTransactionItem extends Component {
 
   rowTitle = () => {
     const item = this.props.item;
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
+    if (item.type === 'user_invoice' || item.type === 'paymentRequest') {
       if (isNaN(item.value)) {
         item.value = '0';
       }
@@ -1629,7 +1629,7 @@ export class BlueListTransactionItem extends Component {
     const item = this.props.item;
     let color = '#37c0a1';
 
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
+    if (item.type === 'user_invoice' || item.type === 'paymentRequest') {
       const currentDate = new Date();
       const now = (currentDate.getTime() / 1000) | 0;
       const invoiceExpiration = item.timestamp + item.expire_time;
@@ -1680,7 +1680,7 @@ export class BlueListTransactionItem extends Component {
       );
     }
 
-    if (this.props.item.type === 'user_invoice' || this.props.item.type === 'payment_request') {
+    if (this.props.item.type === 'user_invoice' || this.props.item.type === 'paymentRequest') {
       if (!this.props.item.ispaid) {
         const currentDate = new Date();
         const now = (currentDate.getTime() / 1000) | 0;
@@ -1735,7 +1735,7 @@ export class BlueListTransactionItem extends Component {
       NavigationService.navigate('TransactionStatus', { hash: this.props.item.hash });
     } else if (
       this.props.item.type === 'user_invoice' ||
-      this.props.item.type === 'payment_request' ||
+      this.props.item.type === 'paymentRequest' ||
       this.props.item.type === 'paid_invoice'
     ) {
       const lightningWallet = BlueApp.getWallets().filter(wallet => {
