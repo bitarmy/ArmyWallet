@@ -1,4 +1,4 @@
-# BlueWallet - A Bitcoin & Lightning Wallet
+# ArmyWallet - A Bitcoin & Lightning Wallet
 
 [![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/BlueWallet/BlueWallet/master/package.json&query=$.version&label=Version)](https://github.com/BlueWallet/BlueWallet)
 [![CircleCI](https://circleci.com/gh/BlueWallet/BlueWallet.svg?style=svg)](https://circleci.com/gh/BlueWallet/BlueWallet)
@@ -7,13 +7,12 @@
 
 Thin Bitcoin Wallet.
 Built with React Native and BlockCypher API.
+Forked from [BlueWallet](http://bluewallet.io)
 
 [![Appstore](https://bluewallet.io/img/app-store-badge.svg)](https://itunes.apple.com/us/app/bluewallet-bitcoin-wallet/id1376878040?l=ru&ls=1&mt=8)
 [![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet)
 
-Website: [bluewallet.io](http://bluewallet.io)
-
-Community: [telegram group](https://t.me/bluewallet)
+Website: [bitarmy.io](http://bluewallet.io)
 
 * Private keys never leave your device
 * Lightning Network supported
@@ -33,8 +32,8 @@ Community: [telegram group](https://t.me/bluewallet)
 * In your console:
 
 ```
-git clone https://github.com/BlueWallet/BlueWallet.git
-cd BlueWallet
+git clone https://github.com/bitarmy/ArmyWallet.git
+cd ArmyWallet
 npm install
 ``` 
 
