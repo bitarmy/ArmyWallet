@@ -1,4 +1,4 @@
-package io.bluewallet.bluewallet;
+package io.armywallet.armywallet;
 
 import android.app.Application;
 

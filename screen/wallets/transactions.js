@@ -399,7 +399,7 @@ export default class WalletTransactions extends Component {
         {this.state.wallet.chain === Chain.ONCHAIN && (
           <Handoff
             title={`Bitcoin Wallet ${this.state.wallet.getLabel()}`}
-            type="io.bluewallet.bluewallet"
+            type="io.armywallet.armywallet"
             url={`https://blockpath.com/search/addr?q=${this.state.wallet.getXpub()}`}
           />
         )}
