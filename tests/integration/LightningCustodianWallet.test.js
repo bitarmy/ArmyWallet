@@ -143,11 +143,11 @@ describe('LightningCustodianWallet', () => {
       body: 'amount=1&currency=btc&description=acceptance+test',
     });
 
-    if (!res.body || !res.body.paymentRequest) {
+    if (!res.body || !res.body.payment_request) {
       throw new Error('Strike problem: ' + JSON.stringify(res));
     }
 
-    let invoice = res.body.paymentRequest;
+    let invoice = res.body.payment_request;
 
     let l2 = new LightningCustodianWallet();
     l2.setSecret(process.env.BLITZHUB);
@@ -220,7 +220,7 @@ describe('LightningCustodianWallet', () => {
     assert.ok(invoices2[0].ispaid === false);
     assert.ok(invoices2[0].description);
     assert.strictEqual(invoices2[0].description, 'test memo');
-    assert.ok(invoices2[0].paymentRequest);
+    assert.ok(invoices2[0].payment_request);
     assert.ok(invoices2[0].timestamp);
     assert.ok(invoices2[0].expire_time);
     assert.strictEqual(invoices2[0].amt, 1);

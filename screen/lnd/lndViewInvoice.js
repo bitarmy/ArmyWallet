@@ -38,7 +38,7 @@ export default class LNDViewInvoice extends Component {
       invoice,
       fromWallet,
       isLoading: false && typeof invoice === 'string', // Whats is this?
-      addressText: typeof invoice === 'object' && invoice.hasOwnProperty('paymentRequest') ? invoice.paymentRequest : invoice,
+      addressText: typeof invoice === 'object' && invoice.hasOwnProperty('payment_request') ? invoice.payment_request : invoice,
       isFetchingInvoices: true,
       qrCodeHeight: height > width ? width - 20 : width / 2,
     };
@@ -56,12 +56,12 @@ export default class LNDViewInvoice extends Component {
           // but that might not work as intended IF user creates 21 invoices, and then tries to check the status of invoice #0, it just wont be updated
           const updatedUserInvoice = userInvoices.filter(invoice =>
             typeof this.state.invoice === 'object'
-              ? invoice.paymentRequest === this.state.invoice.paymentRequest
-              : invoice.paymentRequest === this.state.invoice,
+              ? invoice.payment_request === this.state.invoice.payment_request
+              : invoice.payment_request === this.state.invoice,
           )[0];
 
           if (typeof updatedUserInvoice !== 'undefined') {
-            this.setState({ invoice: updatedUserInvoice, isLoading: false, addressText: updatedUserInvoice.paymentRequest });
+            this.setState({ invoice: updatedUserInvoice, isLoading: false, addressText: updatedUserInvoice.payment_request });
             if (updatedUserInvoice.ispaid) {
               // we fetched the invoice, and it is paid :-)
               this.setState({ isFetchingInvoices: false });
@@ -266,7 +266,7 @@ export default class LNDViewInvoice extends Component {
           >
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 }}>
               <QRCode
-                value={typeof this.state.invoice === 'object' ? invoice.paymentRequest : invoice}
+                value={typeof this.state.invoice === 'object' ? invoice.payment_request : invoice}
                 logo={require('../../img/qr-code.png')}
                 size={this.state.qrCodeHeight}
                 logoSize={90}
@@ -287,7 +287,7 @@ export default class LNDViewInvoice extends Component {
                 {loc.lndViewInvoice.for} {invoice.description}
               </BlueText>
             )}
-            <BlueCopyTextToClipboard text={this.state.invoice.paymentRequest} />
+            <BlueCopyTextToClipboard text={this.state.invoice.payment_request} />
 
             <BlueButton
               icon={{
@@ -298,12 +298,12 @@ export default class LNDViewInvoice extends Component {
               }}
               onPress={async () => {
                 if (this.qrCodeSVG === undefined) {
-                  Share.open({ message: `lightning:${invoice.paymentRequest}` }).catch(error => console.log(error));
+                  Share.open({ message: `lightning:${invoice.payment_request}` }).catch(error => console.log(error));
                 } else {
                   InteractionManager.runAfterInteractions(async () => {
                     this.qrCodeSVG.toDataURL(data => {
                       let shareImageBase64 = {
-                        message: `lightning:${invoice.paymentRequest}`,
+                        message: `lightning:${invoice.payment_request}`,
                         url: `data:image/png;base64,${data}`,
                       };
                       Share.open(shareImageBase64).catch(error => console.log(error));

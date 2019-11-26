@@ -176,7 +176,7 @@ export class LightningCustodianWallet extends LegacyWallet {
         let found = false;
         for (let newInvoice of json) {
           // iterate all NEW invoices
-          if (newInvoice.paymentRequest === oldInvoice.paymentRequest) found = true;
+          if (newInvoice.payment_request === oldInvoice.payment_request) found = true;
         }
 
         if (!found) {
@@ -204,7 +204,7 @@ export class LightningCustodianWallet extends LegacyWallet {
   }
 
   isInvoiceGeneratedByWallet(paymentRequest) {
-    return this.user_invoices_raw.some(invoice => invoice.paymentRequest === paymentRequest);
+    return this.user_invoices_raw.some(invoice => invoice.payment_request === paymentRequest);
   }
 
   async addInvoice(amt, memo) {
@@ -225,11 +225,11 @@ export class LightningCustodianWallet extends LegacyWallet {
       throw new Error('API error: ' + json.message + ' (code ' + json.code + ')');
     }
 
-    if (!json.rHash || !json.paymentRequest) {
+    if (!json.r_hash || !json.pay_req) {
       throw new Error('API unexpected response: ' + JSON.stringify(response.body));
     }
 
-    return json.paymentRequest;
+    return json.pay_req;
   }
 
   async checkRouteInvoice(invoice) {

@@ -92,7 +92,7 @@ export default class WatchConnectivity {
 
             if (transaction.hasOwnProperty('confirmations') && !(transaction.confirmations > 0)) {
               type = 'pendingConfirmation';
-            } else if (transaction.type === 'user_invoice' || transaction.type === 'paymentRequest') {
+            } else if (transaction.type === 'user_invoice' || transaction.type === 'payment_request') {
               const currentDate = new Date();
               const now = (currentDate.getTime() / 1000) | 0;
               const invoiceExpiration = transaction.timestamp + transaction.expire_time;
@@ -111,7 +111,7 @@ export default class WatchConnectivity {
             } else {
               type = 'received';
             }
-            if (transaction.type === 'user_invoice' || transaction.type === 'paymentRequest') {
+            if (transaction.type === 'user_invoice' || transaction.type === 'payment_request') {
               amount = isNaN(transaction.value) ? '0' : amount;
               const currentDate = new Date();
               const now = (currentDate.getTime() / 1000) | 0;
