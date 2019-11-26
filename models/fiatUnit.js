@@ -1,4 +1,5 @@
 export const FiatUnit = Object.freeze({
+  ARS: { endPointKey: 'ARS', symbol: 'ARS', locale: 'es-AR' },
   USD: { endPointKey: 'USD', symbol: '$', locale: 'en-US' },
   AUD: { endPointKey: 'AUD', symbol: '$', locale: 'en-AU' },
   BRL: { endPointKey: 'BRL', symbol: 'R$', locale: 'pt-BR' },

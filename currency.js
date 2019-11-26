@@ -5,7 +5,7 @@ import { FiatUnit } from './models/fiatUnit';
 import DefaultPreference from 'react-native-default-preference';
 import DeviceQuickActions from './class/quickActions';
 let BigNumber = require('bignumber.js');
-let preferredFiatCurrency = FiatUnit.USD;
+let preferredFiatCurrency = FiatUnit.ARS;
 let exchangeRates = {};
 
 const STRUCT = {
@@ -43,18 +43,11 @@ async function updateExchangeRate() {
   try {
     preferredFiatCurrency = JSON.parse(await AsyncStorage.getItem(AppStorage.PREFERRED_CURRENCY));
   } catch (_) {}
-  preferredFiatCurrency = preferredFiatCurrency || FiatUnit.USD;
+  preferredFiatCurrency = preferredFiatCurrency || FiatUnit.ARS;
 
-  let json;
+  let json, price;
   try {
-    const api = new Frisbee({
-      baseURI: 'https://api.coindesk.com',
-    });
-    let response = await api.get('/v1/bpi/currentprice/' + preferredFiatCurrency.endPointKey + '.json');
-    json = JSON.parse(response.body);
-    if (!json || !json.bpi || !json.bpi[preferredFiatCurrency.endPointKey] || !json.bpi[preferredFiatCurrency.endPointKey].rate_float) {
-      throw new Error('Could not update currency rate: ' + response.err);
-    }
+    price = await requestPrice(preferredFiatCurrency.endPointKey);
   } catch (Err) {
     console.warn(Err);
     const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
@@ -62,8 +55,9 @@ async function updateExchangeRate() {
     return;
   }
 
+  console.info('Price catched!! : ' + price);
   exchangeRates[STRUCT.LAST_UPDATED] = +new Date();
-  exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = json.bpi[preferredFiatCurrency.endPointKey].rate_float * 1;
+  exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = price;
   await AsyncStorage.setItem(AppStorage.EXCHANGE_RATES, JSON.stringify(exchangeRates));
   await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(preferredFiatCurrency));
   DeviceQuickActions.setQuickActions();
@@ -125,6 +119,36 @@ function satoshiToBTC(satoshi) {
   let b = new BigNumber(satoshi);
   b = b.dividedBy(100000000);
   return b.toString(10);
+}
+
+async function requestCoinDesk(currency) {
+  const api = new Frisbee({
+    baseURI: 'https://api.coindesk.com',
+  });
+  let response = await api.get('/v1/bpi/currentprice/' + currency + '.json');
+  let json = JSON.parse(response.body);
+  if (!json || !json.bpi || !json.bpi[currency] || !json.bpi[currency].rate_float) {
+    throw new Error('Could not update currency rate: ' + response.err);
+  }
+  return json.bpi[currency].rate_float * 1;
+}
+
+async function requestCoinMonitor() {
+  console.info('requestCoinMonitor...');
+  const api = new Frisbee({
+    baseURI: 'https://coinmonitor.info',
+  });
+  let response = await api.get('/api/btc_en_ars/');
+  let json = JSON.parse(response.body);
+  console.dir(json);
+  if (!json || !json.BTC_en_ARS) {
+    throw new Error('Could not update currency rate: ' + response.err);
+  }
+  return json.BTC_en_ARS * 1;
+}
+
+async function requestPrice(currency) {
+  return currency === 'ARS' ? requestCoinMonitor() : requestCoinDesk(currency);
 }
 
 module.exports.updateExchangeRate = updateExchangeRate;
