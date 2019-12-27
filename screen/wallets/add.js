@@ -1,6 +1,16 @@
 /* global alert */
 import React, { Component } from 'react';
-import { Alert, Text, LayoutAnimation, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, View, TextInput } from 'react-native';
+import {
+  Text,
+  ScrollView,
+  LayoutAnimation,
+  ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  TextInput,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
   BlueTextCentered,
@@ -86,9 +96,9 @@ export default class WalletsAdd extends Component {
 
     return (
       <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1, paddingTop: 40 }}>
-        <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'position' : null} keyboardVerticalOffset={20}>
+        <ScrollView>
           <BlueFormLabel>{loc.wallets.add.wallet_name}</BlueFormLabel>
-          <View
+          <KeyboardAvoidingView
             style={{
               flexDirection: 'row',
               borderColor: '#d2d2d2',
@@ -103,6 +113,9 @@ export default class WalletsAdd extends Component {
               marginVertical: 16,
               borderRadius: 4,
             }}
+            enabled
+            behavior={Platform.OS === 'ios' ? 'position' : null}
+            keyboardVerticalOffset={20}
           >
             <TextInput
               value={this.state.label}
@@ -115,7 +128,7 @@ export default class WalletsAdd extends Component {
               editable={!this.state.isLoading}
               underlineColorAndroid="transparent"
             />
-          </View>
+          </KeyboardAvoidingView>
           <BlueFormLabel>{loc.wallets.add.wallet_type}</BlueFormLabel>
 
           <View
@@ -165,11 +178,7 @@ export default class WalletsAdd extends Component {
             {(() => {
               if (this.state.activeBitcoin && this.state.isAdvancedOptionsEnabled) {
                 return (
-                  <View
-                    style={{
-                      height: 140,
-                    }}
-                  >
+                  <View>
                     <BlueSpacing20 />
                     <Text style={{ color: '#0c2550', fontWeight: '500' }}>{loc.settings.advanced_options}</Text>
                     <RadioGroup onSelect={(index, value) => this.onSelect(index, value)} selectedIndex={0}>
@@ -259,34 +268,11 @@ export default class WalletsAdd extends Component {
                           EV(EV.enum.WALLETS_COUNT_CHANGED);
                           A(A.ENUM.CREATED_WALLET);
                           ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-                          this.props.navigation.dismiss();
+                          this.props.navigation.navigate('PleaseBackupLNDHub', {
+                            wallet: w,
+                          });
                         };
-
-                        if (!BlueApp.getWallets().some(wallet => wallet.type !== LightningCustodianWallet.type)) {
-                          Alert.alert(
-                            loc.wallets.add.lightning,
-                            loc.wallets.createBitcoinWallet,
-                            [
-                              {
-                                text: loc.send.details.cancel,
-                                style: 'cancel',
-                                onPress: () => {
-                                  this.setState({ isLoading: false });
-                                },
-                              },
-                              {
-                                text: loc._.ok,
-                                style: 'default',
-                                onPress: () => {
-                                  this.createLightningWallet();
-                                },
-                              },
-                            ],
-                            { cancelable: false },
-                          );
-                        } else {
-                          this.createLightningWallet();
-                        }
+                        this.createLightningWallet();
                       } else if (this.state.selectedIndex === 2) {
                         // zero index radio - HD segwit
                         w = new HDSegwitP2SHWallet();
@@ -332,7 +318,7 @@ export default class WalletsAdd extends Component {
               }}
             />
           </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
       </SafeBlueArea>
     );
   }
